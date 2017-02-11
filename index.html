@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>表格内容添加删除操作</title>
+		<link rel="stylesheet" type="text/css" href="http://img.yzb123.top/Globalstyle.css"/>
+		<style type="text/css">
+			#app table{border: none; border: 1px solid #d6d6d6;width: 600px;text-align: center;margin: 0 auto;font-size: 14px;line-height: 28px;}
+			#app table th,td{ border: 1px solid #d6d6d6;padding: 5px 0;}
+			#app table th{background: #42b983;color: #fff;}
+			#page{width: 600px;overflow: hidden;margin: 20px auto;text-align: center;}
+			#page ul li{margin-right: 10px;text-align: center;display: inline-block;}
+			#page ul li a{width: 25px;border: 1px solid #d6d6d6;float: left;line-height: 25px;color: #444;text-decoration: none;font-size: 14px;}
+			#page ul li a.active{background: #42B983;color: #fff;}
+			fieldset{width: 560px;margin: 20px auto;padding: 20px;}
+			input,select{border: none;border: 1px solid #42B983;}
+			.form-group{padding-bottom: 10px;}
+			label{width: 50px;display: inline-block;}
+			button{background: #42B983;border: none;color: #fff;padding: 0 10px;line-height: 25px;border-radius: 2px;cursor: pointer;}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<fieldset>
+                <legend>
+                    Create New Person
+                </legend>
+                <div class="form-group">
+                    <label>Name:</label>
+                    <input type="text" v-model="newPerson.name"/>
+                </div>
+                <div class="form-group">
+                    <label>Age:</label>
+                    <input type="text" v-model="newPerson.age"/>
+                </div>
+                <div class="form-group">
+                    <label>Sex:</label>
+                    <select v-model="newPerson.sex">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+                </div>
+                <div class="form-group">
+                    <label></label>
+                    <button @click="createPerson">Create</button>
+                </div>
+        	</fieldset>
+			<table border="0" cellspacing="0" cellpadding="0">
+				<tr>
+					<th>Name</th>
+					<th>Age</th>
+					<th>Sex</th>
+					<th>Delect</th>
+				</tr>
+				<tr v-for="person in people">
+					<td>{{person.name}}</td>
+					<td>{{person.age}}</td>
+					<td>{{person.sex}}</td>
+					<td><button @click="deletePerson($index)">Delete</button></td>
+				</tr>
+			</table>
+			
+		</div>
+		<div id="page">
+			<ul>
+				<li v-for="n in pageCount">
+					<a href="javascript:;" v-bind:class="activeNumber === n ? 'active' : ''" @click="add($index)">{{n}}</a>
+				</li>
+			</ul>
+		</div>
+	</body>
+	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+	<script>
+		var exampleData = new Vue({
+			el:'#app',
+			data:{
+				newPerson: {
+                    name: 'name',
+                    age: 0,
+                    sex: 'Male'
+              	},
+               	people: [{
+                    name: 'Jack',
+                    age: 30,
+                    sex: 'Male'
+                }, {
+                    name: 'Bill',
+                    age: 26,
+                    sex: 'Male'
+                }, {
+                    name: 'Tracy',
+                    age: 22,
+                    sex: 'Female'
+                }, {
+                    name: 'Chris',
+                    age: 36,
+                    sex: 'Male'
+                }]
+			},
+			methods:{
+                createPerson: function(){
+                    this.people.push(this.newPerson);
+                    // 添加完newPerson对象后，重置newPerson对象
+                    this.newPerson = {name: 'name', age: 0, sex: 'Female'}
+                },
+                deletePerson: function(index){
+                    // 删一个数组元素
+                    this.people.splice(index,1);
+                }
+            }
+		})
+		var page=new Vue({
+			el:'#page',
+			data:{
+				activeNumber:2,
+				pageCount:10
+			},
+			methods:{
+				add:function(index){
+					this.select=index
+				}
+			}
+		})
+		/*new Vue({
+			el: '#app',
+			data: exampleData,
+			data: {
+				yes: true,
+				no: false,
+				age: 25,
+				name: 'keep'
+			}
+		})*/
+	</script>
+
+</html>
